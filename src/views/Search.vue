@@ -1,6 +1,7 @@
 <template>
   <div class="container">
       <div class="searchInput">
+    
           <input type="text"  list="names" placeholder="Type Breed name slowly..." v-model="searchString"  />
           <datalist id="names" v-if="flag">
             <option v-for="(dog, name) in allBreads" :key="dog.id" >{{name}}</option>
@@ -11,15 +12,15 @@
               <p v-for="(dog,index) in sub[this.message]" :key="dog.id"><b>Type &nbsp;{{index+1}} : {{dog}}</b></p>
           </div>
         <div class="row">
-          <div class="col-4 wf">
-            <div class="imageContainer" v-if="searchString">   
+          <div class="col-5 wf">
+            <div class="imageContainer" >   
             <img v-if="imageUrl" v-bind:src="imageUrl">
             </div>
           </div>
            
-          <div class="col-8 wf" > 
+          <div class="col-7 wf" > 
             <div class="few">
-                <span  v-for="url in fewImages.message" :key="url.id">
+                <span  v-for="url in fewImages" :key="url.id">
                    <img  v-bind:src="url" />
                 </span>
             </div>
@@ -30,24 +31,33 @@
 
 <script>
 import { debounce } from "lodash";
-import { getAllBreeds,} from "../dog.service";
-import { dogActions } from '../store/modules/action-types.const'
-//getRandomDogImage ,getSubList ,getDogImage
+import { mapActions, mapGetters } from 'vuex';
+import { getSubList,getDogImage} from "../dog.service";
+//import { dogActions } from '../store/modules/action-types.const'
+//getRandomDogImage  ,getDogImage
 export default {
   name: 'Search',
+
   data() {
-    return{
-    allBreads: [],
+    return{ 
     searchString: "",
-    imageUrl: "",
     sub: [],
     message: "message",  
     flag: false,
-    fewImages: []
+    fewImages: [],
     }
   },
+
   created(){  
     this.getAll();
+  },
+  
+  computed: {
+    ...mapGetters({
+     imageUrl: "getRandomImageUrl",
+     allBreads: "getAllBreeds",
+    //  fewImages: "getImageUrl"
+     }),
   },
   
   watch: {
@@ -58,31 +68,29 @@ export default {
        }
        else{
          this.flag = false;
+         
        }
       },1500),
     
   },
   methods: {
+    ...mapActions(["getRandomImage","getAllBreedContent"]),
+    
      getAll(){
-      getAllBreeds().then(res => {
-        this.allBreads=res.data.message;
-      })
+       this.$store.dispatch('getAllBreedContent');
     },
     findBreed(){  
+      
       if(this.searchString.length > 0 && this.flag == true && this.allBreads[this.searchString]){
-          this.imageUrl= this.$store.dispatch(dogActions.getRandomImage,this.searchString)
-          console.log(this.imageUrl);
-      //   getRandomDogImage(this.searchString).then(res => {
-      //   this.imageUrl=res.data.message;
-      //  }); 
+        this.$store.dispatch('getRandomImage',this.searchString);
        
-      //   getSubList(this.searchString).then( res => {
-      //   this.sub=res.data;
-      //     });
-      //   getDogImage(this.searchString,10).then(res => {
-      //   this.fewImages=res.data;
-      // });
-      }
+        getSubList(this.searchString).then( res => {
+        this.sub=res.data;
+          });
+        getDogImage(this.searchString,10).then(res => {
+          this.fewImages = res.data.message;
+        });
+       }
       else{
         alert("Please provide the search input correctly")
       }    
@@ -92,7 +100,7 @@ export default {
 </script>
 <style scoped>
 .imageContainer{
-max-width: 300px;
+max-width: 400px;
 max-height: 400px;
 margin: 0 auto;
 }
@@ -107,8 +115,7 @@ margin: 0 auto;
 .few{
 width:auto;
 height: auto;
-margin:5px;
-
+margin:5px; 
 }
 .few img{
 padding: 10px;

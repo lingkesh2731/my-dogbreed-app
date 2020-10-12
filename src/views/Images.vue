@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-         <span  v-for="url in img.message" :key="url.message">
+         <span  v-for="url in img" :key="url.message">
            <img v-if="img" v-bind:src="url" />
          </span>
          <br/>
@@ -12,7 +12,7 @@
 export default {
     name: 'photos',
     props: {
-        img: Object
+        img: Array
     },
     methods: {
         moreImages(){
@@ -25,12 +25,17 @@ export default {
 <style scoped>
 .container{
     max-width: 1960px;
+    width: 100%;
     overflow: hidden; 
     position: relative;
 }
 .container img{
     padding: 10px;
-    width : 200px;
+    width : 250px;
     height : 200px;
+    
+}
+button{
+    float: center;
 }
 </style>

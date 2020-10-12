@@ -25,7 +25,7 @@ export default {
 
 
 #nav {
-  padding: 20px;
+  padding: 15px;
   background-color:black;
   text-align: left;
 }
@@ -42,8 +42,6 @@ export default {
   position: fixed;
   bottom: 0;
   width: 100%;
-  /* background-color: #ffc107;
-  color: #000; */
   text-align: center;
   font-size: .8em;
 }

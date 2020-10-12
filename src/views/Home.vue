@@ -22,22 +22,20 @@
           <br/>
        </div>
     </div>
-    
     <div class="row">
       <div v-if="status">
-          <Images :img="this.imageUrl" @clickHandleEvents="handleEvents"/>
+          <Images :img="imageUrl" @clickHandleEvents="handleEvents"/>
       </div>
       <div class="puppy" v-if="status == false">
          <img :src="this.dogImage" />
       </div>
     </div>
-  
   </div>
 </template>
 
 <script>
 import Images from "./Images.vue";
-import { getAllBreeds,getDogImage,getSubDogImage } from "../dog.service";
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: "Home",
   components:{
@@ -45,54 +43,56 @@ export default {
   },
   data(){
     return{
-      allBreads: [],
       selectedBreed: "bulldog",
       subBreedname: "",
       flag: false,
       dog: [],
-      imageUrl: [],
       count: 20,
       status: false,
       dogImage:"images/puppy.png",
-      
     };
   },
   created(){  
     this.getAll();
   },
+   computed: {
+    ...mapGetters({
+     allBreads: "getAllBreeds",
+     imageUrl: "getImageUrl",
+     }),
+  },
   methods: {
+    ...mapActions(["getAllBreedContent","getDogImages","getSubDogImages"]),
+
     getAll(){
-      getAllBreeds().then(res => {
-        this.allBreads=res.data.message;
-        console.log(this.allBreads);
-      })
+      this.$store.dispatch('getAllBreedContent')
     },
+
     lookup(){
         console.log(this.selectedBreed);
         this.dog=this.allBreads[this.selectedBreed]
         let len =this.dog.length;
         if(len > 0){
           this.flag=true;
+          this.count=20;
         }
-        else this.flag=false;{
-            console.log(len);
+        else {
+            this.flag=false;
             this.subBreedname="";
+            this.count=20;
         }
     },
-    getImage(){       
-      if(this.subBreedname){
-      getSubDogImage(this.selectedBreed,this.subBreedname,this.count).then(res => {
-        this.imageUrl=res.data;
-        console.log(this.imageUrl);
-        this.status=true;
-      });
+
+    getImage(){    
+      if(this.subBreedname && this.flag==true){
+        this.$store.dispatch({
+          type: 'getSubDogImages', parent: this.selectedBreed,child:this.subBreedname,count:this.count})
+          this.status=true;
       }
-      if(this.selectedBreed){
-         getDogImage(this.selectedBreed,this.count).then(res => {
-        this.imageUrl=res.data;
-        console.log(this.imageUrl);
-        this.status=true;
-      });
+     else if(this.selectedBreed && this.flag == false){
+        this.$store.dispatch({
+          type:'getDogImages',name: this.selectedBreed ,count:this.count})
+          this.status=true;
        }
        else{
          alert("Provide the correct input")
@@ -107,7 +107,7 @@ export default {
 </script>
 <style scoped>
 .home{
-  background-color: black;
+  background-color: white;
 }
 .puppy{
 max-width: 1200px;
@@ -118,16 +118,10 @@ margin: 0 auto;
  padding-bottom: 10%;
  background-size: cover;
 }
-.col-3 {
-  background-color: black;
-}
-a{
- color: antiquewhite;
-}
 h1{
-  color: rgb(238, 229, 229);
+  color:brown
 }
 label{
-  color: antiquewhite;
+  color: brown
 }
 </style>
