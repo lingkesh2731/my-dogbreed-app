@@ -20,7 +20,7 @@ const routes = [
     path: "*",
     name: "PageNotFound",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/PageNotFound.vue")
+      import(/* webpackChunkName: "pagenotfound" */ "../views/PageNotFound.vue")
   }
 ];
 

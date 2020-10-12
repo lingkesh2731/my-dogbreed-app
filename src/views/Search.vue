@@ -33,8 +33,6 @@
 import { debounce } from "lodash";
 import { mapActions, mapGetters } from 'vuex';
 import { getSubList,getDogImage} from "../dog.service";
-//import { dogActions } from '../store/modules/action-types.const'
-//getRandomDogImage  ,getDogImage
 export default {
   name: 'Search',
 
@@ -56,7 +54,7 @@ export default {
     ...mapGetters({
      imageUrl: "getRandomImageUrl",
      allBreads: "getAllBreeds",
-    //  fewImages: "getImageUrl"
+   
      }),
   },
   

@@ -48,8 +48,8 @@ export default new Vuex.Store({
     state.commit('SET_SUBIMAGES',images)
 },
     async getRandomImage(state,dogName) {
-        const i= await getRandomDogImage(dogName);
-        const random=i.data['message'];
+        const img= await getRandomDogImage(dogName);
+        const random=img.data['message'];
         state.commit('SET_RANDOM', random);
       }
   },
