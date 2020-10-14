@@ -1,7 +1,7 @@
 module.exports = {
   preset: "@vue/cli-plugin-unit-jest",
   collectCoverage: true,
-  collectCoverageFrim: [
+  collectCoverageFrom: [
     '**/*.{js,vue}',
     '!**/node_modules/**',
     '!**/*.config.js',
@@ -18,7 +18,7 @@ module.exports = {
       statements: -10,
     },
   },
-  moduleNameMApper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
+  // moduleNameMApper: {
+  //   '^@/(.*)$': '<rootDir>/src/$1',
+  // },
 };

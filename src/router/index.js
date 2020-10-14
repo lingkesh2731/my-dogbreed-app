@@ -14,13 +14,13 @@ const routes = [
     path: "/search",
     name: "Search",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Search.vue")
+      import(/* webpackChunkName: "about" */ "../components/Search.vue")
   },
   {
     path: "*",
     name: "PageNotFound",
     component: () =>
-      import(/* webpackChunkName: "pagenotfound" */ "../views/PageNotFound.vue")
+      import(/* webpackChunkName: "pagenotfound" */ "../components/PageNotFound.vue")
   }
 ];
 

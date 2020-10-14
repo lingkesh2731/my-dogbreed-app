@@ -1,6 +1,7 @@
-import{ shallowMount, createLocalVue } from '@vue/test-utils';
+import{ shallowMount, createLocalVue, RouterLinkStub} from '@vue/test-utils';
 import VueRouter from 'vue-router';
 import app from '@/App.vue';
+
 
 describe('In App component', () => {
     let appWrapper;
@@ -13,6 +14,9 @@ describe('In App component', () => {
         appWrapper = shallowMount(app, {
             localVue,
             router,
+            stubs: {
+                RouterLink: RouterLinkStub,
+              },
         });
     });
     afterEach(() => {
@@ -27,4 +31,9 @@ describe('In App component', () => {
         expect(appWrapper.html()).toContain('<div id="app">');
     });
     
+    // it('renders correct url parameter', () => {
+    //     expect(appWrapper.find(RouterLinkStub).props().to).toStrictEqual(search);
+    //     expect(appWrapper.find(RouterLinkStub).text()).toBe(Search);
+    // })
+
 });

@@ -3,9 +3,11 @@
       <div class="searchInput">
     
           <input type="text"  list="names" placeholder="Type Breed name slowly..." v-model="searchString"  />
-          <datalist id="names" v-if="flag">
-            <option v-for="(dog, name) in allBreads" :key="dog.id" >{{name}}</option>
-          </datalist>
+          <div class='dropdown' v-if="flag">
+               <datalist id="names">
+               <option v-for="(dog, name) in allBreads" :key="dog.id" >{{name}}</option>
+               </datalist>
+          </div>
           <button class="btn btn-primary btn-sm" @click="findBreed()"> Find</button>
       </div>
           <div v-if="sub[this.message]" class="subBreed">
@@ -54,7 +56,6 @@ export default {
     ...mapGetters({
      imageUrl: "getRandomImageUrl",
      allBreads: "getAllBreeds",
-   
      }),
   },
   

@@ -24,7 +24,7 @@
     </div>
     <div class="row">
       <div v-if="status">
-          <Images :img="imageUrl" @clickHandleEvents="handleEvents"/>
+          <Images :imgUrl="imageUrl" @clickHandleEvents="handleEvents"/>
       </div>
       <div class="puppy" v-if="status == false">
          <img :src="this.dogImage" />
@@ -35,7 +35,7 @@
 
 <script>
 import Images from "./Images.vue";
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, } from 'vuex';
 export default {
   name: "Home",
   components:{
@@ -65,6 +65,7 @@ export default {
     ...mapActions(["getAllBreedContent","getDogImages","getSubDogImages"]),
 
     getAll(){
+      //this.getAllBreedContent();
       this.$store.dispatch('getAllBreedContent')
     },
 

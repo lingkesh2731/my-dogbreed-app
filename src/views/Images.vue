@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-         <span  v-for="url in img" :key="url.message">
-           <img v-if="img" v-bind:src="url" />
+         <span  v-for="url in imgUrl" :key="url.id">
+           <img class="images" v-bind:src="url" />
          </span>
          <br/>
         <button class="btn btn-primary" @click="moreImages()" >More</button>
@@ -12,7 +12,7 @@
 export default {
     name: 'photos',
     props: {
-        img: Array
+        imgUrl: Array
     },
     methods: {
         moreImages(){

@@ -42,6 +42,7 @@ export default new Vuex.Store({
       const images=tot.data['message'];
       state.commit('SET_IMAGES',images)
   },
+  
   async getSubDogImages( state,payload){
     const tot=await getSubDogImage(payload.parent, payload.child, payload.count);
     const images=tot.data['message'];
