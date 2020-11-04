@@ -1,21 +1,19 @@
 <template>
   <div id="app">
     <div id="nav">
-        <router-link class="left" to="/">Home</router-link> &nbsp; |
-        <router-link class="search" to="/search">&nbsp; Search</router-link>
+      <router-link class="left" to="/">Home</router-link> &nbsp; |
+      <router-link class="search" to="/search">&nbsp; Search</router-link>
     </div>
-     <router-view />
-  
+    <router-view />
   </div>
 </template>
 <script>
 export default {
-  name: 'app',
-}
+  name: "app"
+};
 </script>
 <style>
 #app {
-  
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -23,10 +21,9 @@ export default {
   color: #2c3e50;
 }
 
-
 #nav {
   padding: 15px;
-  background-color:black;
+  background-color: black;
   text-align: left;
 }
 
@@ -43,6 +40,6 @@ export default {
   bottom: 0;
   width: 100%;
   text-align: center;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 </style>

@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-
+import PageNotFound from "../components/PageNotFound.vue"
+import Search from "../components/Search.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,18 +14,23 @@ const routes = [
   {
     path: "/search",
     name: "Search",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../components/Search.vue")
+    component: Search
+    // component: () =>
+    //   import(/* webpackChunkName: "about" */ "../components/Search.vue")
   },
   {
     path: "*",
     name: "PageNotFound",
-    component: () =>
-      import(/* webpackChunkName: "pagenotfound" */ "../components/PageNotFound.vue")
+    component: PageNotFound
+    // component: () =>
+    //   import(
+    //     /* webpackChunkName: "pagenotfound" */ "../components/PageNotFound.vue"
+     // )
   }
 ];
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 });
 
