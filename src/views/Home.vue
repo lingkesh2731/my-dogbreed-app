@@ -5,7 +5,7 @@
         <h1>My Dog World</h1>
         <label for="breeds">AllBreeds</label>
         <select v-model="selectedBreed" @change="lookup()">
-          <option v-for="(dog, name) in allBreads" :key="dog.id">{{
+          <option v-for="(dog, name) in $store.state.allBreeds" :key="dog.name">{{
             name
           }}</option>
         </select>
@@ -38,7 +38,8 @@
 
 <script>
 import DogImages from "./DogImages";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters} from "vuex";
+ 
 export default {
   name: "Home",
   components: {
@@ -52,24 +53,29 @@ export default {
       dog: [],
       count: 20,
       status: false,
-      dogImage: "images/puppy.png"
+      dogImage: "images/puppy.png",
+      allBreeds: []
+
     };
   },
   created() {
-    this.$store.dispatch("getAllBreedContent");
+    //this.$store.dispatch("getAllBreedContent");
+    this.getAllBreedContent();
   },
   computed: {
     ...mapGetters({
-      allBreads: "getAllBreeds",
+      //allBreeds: "getAllBreeds",
       imageUrl: "getImageUrl"
     })
   },
+
   methods: {
     ...mapActions(["getAllBreedContent", "getDogImages", "getSubDogImages"]),
 
     lookup() {
+      
       console.log(this.selectedBreed);
-      this.dog = this.allBreads[this.selectedBreed];
+      this.dog = this.$store.state.allBreeds[this.selectedBreed];
       let len = this.dog.length;
       if (len > 0) {
         this.flag = true;
@@ -81,23 +87,23 @@ export default {
       }
     },
     getImage() {
-      if (this.subBreedname && this.flag == true) {
+        if (this.selectedBreed && this.flag == false) {
+        this.$store.dispatch("getDogImages", {
+          name: this.selectedBreed,
+          count: this.count
+        });
+        this.status = true;
+      } else if (this.subBreedname && this.flag == true) {
         this.$store.dispatch("getSubDogImages", {
           parent: this.selectedBreed,
           child: this.subBreedname,
           count: this.count
         });
         this.status = true;
-      } else if (this.selectedBreed && this.flag == false) {
-        this.$store.dispatch("getDogImages", {
-          name: this.selectedBreed,
-          count: this.count
-        });
-        this.status = true;
-      } else {
+       } else {
         alert("Provide the correct input");
       }
-    },
+   },
     handleEvents() {
       this.count += 20;
       this.getImage();

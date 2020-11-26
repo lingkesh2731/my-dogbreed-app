@@ -44,14 +44,14 @@ export const subBreedImages = [
   "https://images.dog.ceo/breeds/bulldog-english/mami.jpg"
 ];
 
-export function getSubList(name) {
-  if (name == "boxer") {
-    return null;
-  } else if (name == "bulldog") {
-    return ["boston", "english", "french"];
-  }
-}
+// export function getSubList(name) {
+//   if (name == "boxer") {
+//     return null;
+//   } else if (name == "bulldog") {
+//     return ["boston", "english", "french"];
+//   }
+// }
 
-export function getDogImage(name) {
-  return "https://images.dog.ceo/breeds/boxer/n02108089_2740.jpg";
-}
+// export function getDogImage(name) {
+//   return "https://images.dog.ceo/breeds/boxer/n02108089_2740.jpg";
+// }

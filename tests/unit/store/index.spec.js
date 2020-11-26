@@ -1,13 +1,9 @@
 //import {getAllBreeds,getDogImage,getRandomDogImage,getSubDogImage} from '../../../src/dog.service'
 
+import store from "../../../src/store/index";
 import sampleStore from "../../../src/store/index";
-
-const method = require("../../../src/dog.service");
-jest.mock("../../../src/dog.service", () => ({
-  getAllBreeds: jest.fn(),
-  getDogImage: jest.fn(),
-  getSubList: jest.fn()
-}));
+import {getAllBreeds,getDogImage,getSubDogImage,getRandomDogImage} from '../../../src/dog.service.js';
+jest.mock("../../../src/dog.service.js")
 
 describe("Mutations ", () => {
   it("Sets the allBreeds", () => {
@@ -37,18 +33,18 @@ describe("Mutations ", () => {
     sampleStore.mutations.SET_IMAGES(state, imageUrlLocal);
     expect(state.imageUrl).toBe(imageUrlLocal);
   });
-  // it('sets the subimage', () => {
-  //     const state = {
-  //         imageUrl : []
-  //      }
-  //      const imageUrlLocal = [
-  //         "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
-  //         "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",
-  //         "https://images.dog.ceo/breeds/african/n02116738_1739.jpg",
-  //     ]
-  //     sampleStore.mutations.SET_SUBIMAGES(state,imageUrlLocal)
-  //     expect(state.imageUrl).toBe(imageUrlLocal);
-  // })
+  it('sets the subimage', () => {
+      const state = {
+          imageUrl : []
+       }
+       const imageUrlLocal = [
+          "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
+          "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",
+          "https://images.dog.ceo/breeds/african/n02116738_1739.jpg",
+      ]
+      sampleStore.mutations.SET_SUBIMAGES(state,imageUrlLocal)
+      expect(state.imageUrl).toBe(imageUrlLocal);
+  })
   it("sets the randomImageUrl", () => {
     const state = {
       randomImageUrl: ""
@@ -87,35 +83,76 @@ describe("Mutations ", () => {
     });
   });
 
-  // describe("Actions", () => {
-  //   beforeEach(() => {});
-  //   it("calls the SET_ALLBREEDS mutation", async () => {
-  //     // const context = {
-  //     //     commit: jest.fn()
-  //     // }
+  describe("Actions", () => {
+    it("calls the SET_ALLBREEDA mutations", async() => {
+      let commit = jest.fn();
+      const dogs = {
+        data: {
+          message:{
+            affenoinscher: [],
+            african: [],
+            australian: ["shepherd"],
+            boxer: [],
+            bulldog: ["boston", "english", "french"]
+          }
+        }
+      }
+      getAllBreeds.mockResolvedValue(dogs);
+      await store.actions.getAllBreedContent({commit});
+      expect(commit).toHaveBeenCalledWith("SET_ALLBREEDS", dogs.data.message);
+    })
+    it("calls the SET_IMAGES mutation", async() => {
+      let commit = jest.fn();
+      let payload = {
+        name: "african",
+        count: 20,
+      }
+      const dogs = {
+        data: {
+          message: [
+            "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
+            "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",
+            "https://images.dog.ceo/breeds/african/n02116738_1739.jpg"
+          ]
+         }
+      }
+      getDogImage.mockResolvedValue(dogs);
+      await store.actions.getDogImages({commit},{payload});
+      expect(commit).toHaveBeenCalledWith("SET_IMAGES", dogs.data.message);
+    })
+    it("calls the SET_SUBIMAGES mutation", async() => {
+      let commit = jest.fn();
+      let payload = {
+        parent : "african",
+        chile: "",
+        count: 20
+      }
+      const dogs = {
+        data: {
+          message: [
+            "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
+            "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",
+            "https://images.dog.ceo/breeds/african/n02116738_1739.jpg"
+          ]
+         }
+      }
+      getSubDogImage.mockResolvedValue(dogs);
+      await store.actions.getSubDogImages({commit},{payload});
+      expect(commit).toHaveBeenCalledWith("SET_SUBIMAGES", dogs.data.message);
+    })
 
-  //     // const state = {
-  //     //     allBreeds : [],
-  //     //     // commit: jest.fn()
-  //     //  }
-  //     // const allContent = Promise.resolve();
-  //     // method.getAllBreeds.mockImplementation(() => allContent)
-  //    // sampleStore.actions.getAllBreedContent(state);
-  //     // await allContent
-  //     // expect().toHaveBeenCalledWith('SET_ALLBREEDS',allContent)
-
-  //     // const commit= jest.fn();
-  //     // const promise= {message :{
-  //     //     "affenoinscher": [],
-  //     //     "african": [],
-  //     //     "australian": ["shepherd"],
-  //     //     "boxer": [],
-  //     //     "bulldog": ["boston", "english", "french"],
-  //     // }}
-
-  //     // method.getAllBreeds.mockImplementation(() => promise)
-  //     // await sampleStore.actions.getAllBreedContent({commit},{getAllBreeds})
-  //     // expect(commit).toHaveBeenCalledWith('SET_ALLBREEDS', true)
-  //   });
-  //});
+    it("calls the SET_RANDOM mutation", async() => {
+      let commit = jest.fn();
+      const dogs = {
+        data: {
+          message: [
+            "https://images.dog.ceo/breeds/african/n02116738_1739.jpg"
+          ]
+         }
+      }
+      getRandomDogImage.mockResolvedValue(dogs);
+      await store.actions.getRandomImage({commit});
+      expect(commit).toHaveBeenCalledWith("SET_RANDOM", dogs.data.message);
+    })
+  })
 });

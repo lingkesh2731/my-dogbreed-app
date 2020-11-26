@@ -9,7 +9,7 @@
       />
       <div class="dropdown" v-if="flag">
         <datalist id="names">
-          <option v-for="(dog, name) in allBreads" :key="dog.id">{{
+          <option v-for="(dog, name) in $store.state.allBreeds" :key="dog.id">{{
             name
           }}</option>
         </datalist>
@@ -52,7 +52,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { getSubList, getDogImage } from "../dog.service";
+// import { getSubList, getDogImage } from "../dog.service";
+//import {  getDogImage } from "../dog.service";
 export default {
   name: "Search",
   data() {
@@ -61,16 +62,19 @@ export default {
       sub: [],
       message: "message",
       flag: false,
-      fewImages: []
+      fewImages: [],
+      
     };
   },
   created() {
-    this.$store.dispatch("getAllBreedContent");
+    //this.$store.dispatch("getAllBreedContent");
+    this.getAllBreedContent();
+    //this.all=this.allBreads;
   },
   computed: {
     ...mapGetters({
       imageUrl: "getRandomImageUrl",
-      allBreads: "getAllBreeds"
+     // allBreads: "getAllBreeds"
     })
   },
   watch: {
@@ -86,21 +90,25 @@ export default {
     ...mapActions(["getRandomImage", "getAllBreedContent"]),
 
     findBreed() {
+      //console.log(this.all);
       if (
         this.searchString.length > 0 &&
-        this.flag == true &&
-        this.allBreads[this.searchString]
+        this.flag == true  && 
+        this.$store.state.allBreeds[this.searchString]
+        //this.all.includes(this.searchString)
+        //(this.all.indexOf(this.searchString) !== -1)
+        //this.all[this.searchString]
       ) {
-        console.log("here");
+       // console.log("here");
         this.$store.dispatch("getRandomImage", this.searchString);
 
-        getSubList(this.searchString).then(res => {
-          this.sub = res.data;
-        });
+        // getSubList(this.searchString).then(res => {
+        //   this.sub = res.data;
+        //});
 
-        getDogImage(this.searchString, 10).then(res => {
-          this.fewImages = res.data.message;
-        });
+        // getDogImage(this.searchString, 10).then(res => {
+        //   this.fewImages = res.data.message;
+        // });
       } else {
         alert("Please provide the search input correctly");
       }
@@ -125,7 +133,7 @@ export default {
   }
 }
 .random img {
-  width: 60%;
+  width: 75%;
   height: 400px;
   padding-bottom: 5%;
 }

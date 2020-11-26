@@ -1,10 +1,11 @@
 import { shallowMount, createLocalVue, RouterLinkStub } from "@vue/test-utils";
 import VueRouter from "vue-router";
 import app from "@/App.vue";
+import { routes } from '../../src/router/index';
 
 describe("In App component", () => {
   let appWrapper;
-  const router = new VueRouter({ path: "/", name: "Home" });
+  const router = new VueRouter({ routes });
 
   beforeEach(() => {
     const localVue = createLocalVue();

@@ -2,6 +2,7 @@ import Search from "../../../src/components/Search.vue";
 import Vuex from "vuex";
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import VueRouter from "vue-router";
+import * as data from '../testing_data';
 //import { getSubList } from "../testing_data";
 //import {getSubList, getDogImage } from '../testing_data'
 import { getSubList, getDogImage } from "../../../src/dog.service";
@@ -27,6 +28,7 @@ describe("search.vue", () => {
 
     mockStore = {
       state: {
+        allBreeds: data.allBreeds,
         imageUrl: [],
         randomImageUrl: ""
       },
@@ -44,7 +46,8 @@ describe("search.vue", () => {
       },
       computed: {
         imageUrl: () => "getRandomImageUrl",
-        allBreads: () => "getAllBreeds"
+        allBreads: () => ['bulldog','african']
+        // allBreads: () => "getAllBreeds"
       },
       data: () => ({
         searchString: "",
@@ -106,37 +109,38 @@ describe("search.vue", () => {
       //searchWrapper.vm.findBreed = jest.fn();
       searchWrapper.setData({ searchString: "bulldog" });
       searchWrapper.setData({ flag: true });
-      const allBreedsLocal = {
-        affenoinscher: [],
-        african: [],
-        australian: ["shepherd"],
-        boxer: [],
-        bulldog: ["boston", "english", "french"]
-      };
-      searchWrapper.vm.$options.computed.allBreads.call(allBreedsLocal)
+      searchWrapper.setData({ all: ['bulldog','african'] });
+      // const allBreedsLocal = {
+      //   affenoinscher: [],
+      //   african: [],
+      //   australian: ["shepherd"],
+      //   boxer: [],
+      //   bulldog: ["boston", "english", "french"]
+      // };
+      // searchWrapper.vm.$options.computed.allBreads.call(allBreedsLocal)
     });
     it('calls every method inside findbreed', async () => {
       searchWrapper.vm.findBreed();
-
+      const name = searchWrapper.vm.searchString;
       expect(searchWrapper.vm.$store.dispatch).toHaveBeenCalledWith('getRandomImage', name)
-      const subbreed = ["boston", "english", "french"];
-      getSubList.mockReturnValue({
-        res: {
-          data: ["boston", "english", "french"],
-        }
-      })
-      console.log(res.data);
+      // const subbreed = ["boston", "english", "french"];
+      // getSubList.mockReturnValue({
+      //   res: {
+      //     data: ["boston", "english", "french"],
+      //   }
+      // })
+      // console.log(res.data);
       //getSubList.mockImplementation(() => promise);
       //searchWrapper.vm.findBreed();
       //await promise;
-      const name = searchWrapper.vm.searchString;
+     
       //expect(getSubList(name)).toHaveBeenCalled;
-      return getSubList(name).then(res => {
-        expect(res.data).toEqual(subbreed);
+      // return getSubList(name).then(res => {
+      //   expect(res.data).toEqual(subbreed);
         // expect(getSubList(name).then(function (){
         //   expect(res.data).toEqual(subbreed);
         //}))
-    });
+  //  });
 //     const imageUrl = [
 //       "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
 //       "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",

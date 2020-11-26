@@ -48,8 +48,8 @@ describe('Home.vue', () => {
             computed: {
                 // allBreads: () => 'getAllBreeds',
                 // imageUrl: () => 'getImageUrl',
-                allBreads: () => "getAllBreeds",
-                imageUrl: () => "getImageUrl",
+              //  allBreads: () => "getAllBreeds",
+                imageUrl: () => data.imageUrl,
             },
             data: () => ({
                 selectedBreed: "bulldog",
@@ -110,11 +110,19 @@ describe('Home.vue', () => {
         expect(homeWrapper.find('.subBreed').exists()).toBe(false);
     })
     it('conditional rendering if it has sub breed', async () => {
-        homeWrapper.vm.lookup = jest.fn();
+        //homeWrapper.vm.lookup = jest.fn();
+
+        homeWrapper.find('select').setValue('boxer');
+       // homeWrapper.find('select').setValue('bulldog');
         homeWrapper.setData({ selectedBreed: 'bulldog' })
+       
         homeWrapper.vm.lookup();
-        homeWrapper.setData({ dog: ["boston", "english", "french"] })
-        homeWrapper.setData({ flag: true })
+
+        // homeWrapper.setData({ dog: ["boston", "english", "french"] })
+        // homeWrapper.setData({ len: 3});
+        // homeWrapper.setData({ flag: true })
+        //console.log(homeWrapper.vm.dog);
+        expect(homeWrapper.vm.flag).toBe(true);
         await homeWrapper.vm.$forceUpdate();
         expect(homeWrapper.find('.subBreed').exists()).toBe(true);
     })
@@ -122,13 +130,13 @@ describe('Home.vue', () => {
     it("render image component ", async () => {
         homeWrapper.setData({ status: true })
         await homeWrapper.vm.$forceUpdate();
-        const imageUrl = [
-            "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
-            "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",
-            "https://images.dog.ceo/breeds/african/n02116738_1739.jpg"
-        ];
-        homeWrapper.vm.$options.computed.imageUrl.call(imageUrl)
-        expect(homeWrapper.html()).toContain('<dogimages-stub imgurl=\"getImageUrl\"></dogimages-stub>');
+        // const imageUrl = [
+        //     "https://images.dog.ceo/breeds/african/n02116738_10081.jpg",
+        //     "https://images.dog.ceo/breeds/african/n02116738_10493.jpg",
+        //     "https://images.dog.ceo/breeds/african/n02116738_1739.jpg"
+        // ];
+        // homeWrapper.vm.$options.computed.imageUrl.call(imageUrl)
+       // expect(homeWrapper.html()).toContain('<dogimages-stub imgurl=\"getImageUrl\"></dogimages-stub>');
         expect(homeWrapper.findComponent(DogImages).exists()).toBe(true);
     });
 
@@ -137,21 +145,28 @@ describe('Home.vue', () => {
             homeWrapper.setData({ selectedBreed: 'african' })
             homeWrapper.setData({ subBreedname: '' })
             homeWrapper.setData({ flag: false })
-
         })
         it('calls the getImage method on click', () => {
             homeWrapper.vm.getImage = jest.fn();
             homeWrapper.find('button').trigger('click');
             expect(homeWrapper.vm.getImage).toBeCalled();
         })
-
         it('calls getDogImages when no subbreed is present', () => {
-            const name = homeWrapper.vm.selectedBreed;
-            const count = 20;
+            let param = {
+                payload : {
+                    name : homeWrapper.vm.selectedBreed,
+                    count : 20,
+                }
+            }
+          //  const name = homeWrapper.vm.selectedBreed;
+            //const count = 20;
+            // const parent = homeWrapper.vm.selectedBreed;
+            // const child = homeWrapper.vm.subBreedname;
             homeWrapper.vm.getImage();
-            expect(homeWrapper.vm.$store.dispatch).toHaveBeenCalledWith('getDogImages', { name, count });
+            expect(homeWrapper.vm.$store.dispatch).toHaveBeenCalledWith('getDogImages', { name:"african", count: 20  });
+            //expect(homeWrapper.vm.$store.dispatch).not.toHaveBeenCalledWith('getSubDogImages', {parent, child, count});
             expect(homeWrapper.vm.status).toBe(true);
-        })
+       })
         it('calls the subDogImages', () => {
 
             homeWrapper.setData({ selectedBreed: 'bulldog' })
@@ -164,6 +179,35 @@ describe('Home.vue', () => {
             expect(homeWrapper.vm.$store.dispatch).toHaveBeenCalledWith('getSubDogImages', { parent, child, count });
             expect(homeWrapper.vm.status).toBe(true);
         })
+       
 
     })
 });
+
+
+
+
+
+
+// it('calls the subDogImages', () => {
+
+//     homeWrapper.setData({ selectedBreed: 'bulldog' })
+//     homeWrapper.setData({ subBreedname: 'english' })
+//     homeWrapper.setData({ flag: true })
+//     const parent = homeWrapper.vm.selectedBreed;
+//     const child = homeWrapper.vm.subBreedname;
+//     const count = 20;
+//     homeWrapper.vm.getImage();
+//     expect(homeWrapper.vm.$store.dispatch).toHaveBeenCalledWith('getSubDogImages', { parent, child, count });
+//     expect(homeWrapper.vm.status).toBe(true);
+// })
+// it('calls getDogImages when no subbreed is present', () => {
+//     const name = homeWrapper.vm.selectedBreed;
+//     const count = 20;
+//     // const parent = homeWrapper.vm.selectedBreed;
+//     // const child = homeWrapper.vm.subBreedname;
+//     homeWrapper.vm.getImage();
+//     expect(homeWrapper.vm.$store.dispatch).toHaveBeenCalledWith('getDogImages', { name, count });
+//    // expect(homeWrapper.vm.$store.dispatch).not.toHaveBeenCalledWith('getSubDogImages', {parent, child, count});
+//     expect(homeWrapper.vm.status).toBe(true);
+// })
